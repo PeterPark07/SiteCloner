@@ -1,5 +1,5 @@
 from flask import Flask, request, Response
-from urllib.request import urlopen
+import requests
 
 app = Flask(__name__)
 
@@ -28,9 +28,9 @@ def fetch_and_modify_content(url):
     global user_site
     full_url = user_site + '/' + url
     try:
-        response = urlopen(full_url)
-        content_type = response.getheader('Content-Type')
-        html_content = response.read()
+        response = requests.get(full_url)
+        content_type = response.headers['Content-Type']
+        html_content = response.content
         return html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1), content_type
     except Exception as e:
         return str(e), 'text/plain'
