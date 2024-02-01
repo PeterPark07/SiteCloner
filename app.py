@@ -13,12 +13,22 @@ def set_site(site):
 
 @app.route('/<path:url>')
 def proxy(url):
-    if not url:
-        return 'good one '
     global user_site
     full_url = user_site + '/' + url
     try:
         response = urlopen(full_url)
+        content_type = response.getheader('Content-Type')
+        html_content = response.read()
+
+        return Response(html_content, content_type=content_type)
+    except Exception as e:
+        return str(e)
+
+@app.route('/')
+def site():
+    global user_site
+    try:
+        response = urlopen(user_site)
         content_type = response.getheader('Content-Type')
         html_content = response.read()
 
