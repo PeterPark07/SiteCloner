@@ -26,12 +26,15 @@ js_code = f"""
 </script>
 """
 
+session = requests.Session()
+
 @app.route('/clone', methods=['GET', 'POST'])
 def clone_site():
-    global user_site
+    global user_site, session
     if request.method == 'POST':
         site = request.form.get('site', '')
-        user_site = user_site = site.rstrip('/')
+        user_site = site.rstrip('/')
+        session = requests.Session()  # Create a new session for cloned URL
         return f"User site set to: {user_site}"
     return """
     <form method="post">
@@ -45,7 +48,7 @@ def fetch_and_modify_content(url):
     global user_site
     full_url = user_site + '/' + url
     try:
-        response = requests.get(full_url, headers=headers)
+        response = session.get(full_url, headers=headers)
         content_type = response.headers['Content-Type']
         html_content = response.content.replace(user_site.encode('utf-8'), server_url.encode('utf-8'))
         return html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1), content_type
