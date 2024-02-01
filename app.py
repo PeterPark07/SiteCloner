@@ -1,5 +1,4 @@
 from flask import Flask, request, Response
-import requests
 
 app = Flask(__name__)
 
@@ -18,11 +17,20 @@ js_code = """
 </script>
 """
 
-@app.route('/clone/<path:site>')
-def set_site(site):
+@app.route('/clone', methods=['GET', 'POST'])
+def clone_site():
     global user_site
-    user_site = site
-    return f"User site set to: {user_site}"
+    if request.method == 'POST':
+        site = request.form.get('site', '')
+        user_site = site
+        return f"User site set to: {user_site}"
+    return """
+    <form method="post">
+        <label for="site">Enter Website URL:</label>
+        <input type="text" id="site" name="site">
+        <input type="submit" value="Clone">
+    </form>
+    """
 
 def fetch_and_modify_content(url):
     global user_site
