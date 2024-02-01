@@ -1,7 +1,9 @@
 from flask import Flask, request, Response
 import requests 
+import os
 
 app = Flask(__name__)
+server_url = os.getenv('url')
 
 user_site = ""
 headers = {
@@ -42,8 +44,9 @@ def fetch_and_modify_content(url):
     try:
         response = requests.get(full_url, headers=headers)
         content_type = response.headers['Content-Type']
-        b = user_site.encode('utf-8') + b'/'
-        html_content = response.content.replace(b, b'/')
+        user_url_bytes = user_site.encode('utf-8')
+        server_url_bytes = server_url.encode('utf-8')
+        html_content = response.content.replace(user_url_bytes, server_url_bytes)
         return html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1), content_type
     except Exception as e:
         return str(e), 'text/plain'
