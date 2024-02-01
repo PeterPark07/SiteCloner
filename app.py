@@ -30,11 +30,10 @@ session = requests.Session()
 
 @app.route('/clone', methods=['GET', 'POST'])
 def clone_site():
-    global user_site, session
+    global user_site
     if request.method == 'POST':
         site = request.form.get('site', '')
         user_site = site.rstrip('/')
-        session = requests.Session()  # Create a new session for cloned URL
         return f"User site set to: {user_site}"
     return """
     <form method="post">
