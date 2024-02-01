@@ -24,5 +24,9 @@ def proxy(url):
     except Exception as e:
         return str(e)
 
+@app.route('/')
+def site():
+    return 'set a site'
+
 if __name__ == '__main__':
     app.run(debug=True)
