@@ -42,7 +42,7 @@ def fetch_and_modify_content(url):
     try:
         response = requests.get(full_url, headers=headers)
         content_type = response.headers['Content-Type']
-        html_content = response.content.replace(user_site, '/')
+        html_content = response.content.replace(user_site + '/', '/')
         return html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1), content_type
     except Exception as e:
         return str(e), 'text/plain'
