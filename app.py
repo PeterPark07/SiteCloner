@@ -10,7 +10,7 @@ js_code = """
     document.addEventListener('DOMContentLoaded', () => {
         document.body.addEventListener('click', e => {
             const targetUrl = e.target.getAttribute('href');
-            if (targetUrl && targetUrl.startsWith('http') && !window.confirm('You are leaving the proxy site. Continue?')) {
+            if (targetUrl && targetUrl.startsWith('http') && !window.confirm('You are leaving the proxy site and going to ' + targetUrl + '. Continue?')) {
                 e.preventDefault();
             }
         });
