@@ -33,7 +33,7 @@ def fetch_and_modify_content(url):
         html_content = response.read()
         return html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1), content_type
     except Exception as e:
-        return str(e)
+        return str(e), 'text/plain'
 
 @app.route('/<path:url>')
 def proxy(url):
