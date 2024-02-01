@@ -33,6 +33,8 @@ def clone_site():
     global user_site
     if request.method == 'POST':
         site = request.form.get('site', '')
+        if site.startswith('www'):
+            site = 'https://' + site
         user_site = site.rstrip('/')
         return f"User site set to: {user_site}"
     return """
