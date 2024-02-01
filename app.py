@@ -4,7 +4,10 @@ import requests
 app = Flask(__name__)
 
 user_site = ""
-
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36',
+    'Accept-Language': 'en-US,en;q=0.9',
+}
 js_code = """
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -37,7 +40,7 @@ def fetch_and_modify_content(url):
     global user_site
     full_url = user_site + '/' + url
     try:
-        response = requests.get(full_url)
+        response = requests.get(full_url, headers=headers)
         content_type = response.headers['Content-Type']
         html_content = response.content
         return html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1), content_type
