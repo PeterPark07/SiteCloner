@@ -36,7 +36,7 @@ def clone_site():
         if site.startswith('www'):
             site = 'https://' + site
         user_site = site.rstrip('/')
-        return f"User site set to: {user_site}<br><br><a href='/'>Return
+        return f"User site set to: {user_site}<br><br><a href='/'>Return"
     return """
     <form method="post">
         <label for="site">Enter Website URL:</label>
