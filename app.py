@@ -13,6 +13,8 @@ def set_site(site):
 
 @app.route('/<path:url>')
 def proxy(url):
+    if not url:
+        return 'good one '
     global user_site
     full_url = user_site + '/' + url
     try:
@@ -23,10 +25,6 @@ def proxy(url):
         return Response(html_content, content_type=content_type)
     except Exception as e:
         return str(e)
-
-@app.route('/')
-def site():
-    return 'set a site'
 
 if __name__ == '__main__':
     app.run(debug=True)
