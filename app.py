@@ -28,6 +28,9 @@ session.headers.update({
     'Accept-Language': 'en-US,en;q=0.9',
 })
 
+# List to store visited URLs
+visited_urls = []
+
 @app.route('/clone', methods=['GET', 'POST'])
 def clone_site():
     global user_site
@@ -38,9 +41,13 @@ def clone_site():
         user_site = site.rstrip('/')
         return f"User site set to: {user_site}<br><br><a href='/'>Return"
 
-    
+    # Display visited URLs in the GET part
+    visited_urls_str = '<br>'.join(visited_urls) if visited_urls else 'No visited URLs yet.'
     return f"""
 Currently cloning: {user_site}
+
+Visited URLs:
+{visited_urls_str}
 
 <form method='post'>
     <label for='site'>Enter Website URL:</label>
@@ -48,10 +55,11 @@ Currently cloning: {user_site}
     <input type='submit' value='Clone'>
 </form>
 """
-    
+
 def fetch_and_modify_content(url):
-    global user_site
+    global user_site, visited_urls
     full_url = user_site + '/' + url
+    visited_urls.append(full_url)
     try:
         response = session.get(full_url)
         content_type = response.headers['Content-Type']
