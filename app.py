@@ -51,15 +51,8 @@ def fetch_and_modify_content(url):
     try:
         response = session.get(full_url)
         content_type = response.headers['Content-Type']
-        html_content_str = response.content.decode('utf-8')
-        
-        # Perform the replacement as a string
-        modified_content_str = html_content_str.replace(user_site, server_url)
-        
-        # Convert the modified content back to bytes
-        modified_content = modified_content_str.encode('utf-8')
-
-        return modified_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1), content_type
+        html_content = response.content.replace(user_site.encode('utf-8'), server_url.encode('utf-8'))
+        return html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1), content_type
     except Exception as e:
         return str(e), 'text/plain'
 
