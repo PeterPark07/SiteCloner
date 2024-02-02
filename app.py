@@ -1,5 +1,6 @@
 from flask import Flask, request, Response
 import requests
+import time
 import os
 
 app = Flask(__name__)
@@ -20,6 +21,7 @@ js_code = """
     });
 </script>
 """
+overall_time = 0.0
 
 # Create a session and set headers
 session = requests.Session()
@@ -53,6 +55,8 @@ Currently cloning: {user_site}
 </form>
 <br><br>
 Visited URLs:
+{overall_time}
+<br><br>
 {visited_urls_str}
 """
 
@@ -60,6 +64,8 @@ def fetch_and_modify_content(url):
     global user_site, visited_urls
     full_url = user_site + '/' + url
     visited_urls.append(full_url)
+    # Record the start time for the operation
+    start_time = time.time()
     try:
         response = session.get(full_url)
         content_type = response.headers['Content-Type']
@@ -67,9 +73,11 @@ def fetch_and_modify_content(url):
         
         if not content_type.startswith('image'):
             html_content = response.content.replace(user_site.encode('utf-8'), server_url.encode('utf-8'))
+            html_content = html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1)
+            add_time_taken(start_time)
             visited_urls.append('Used Replace links@@@@@@@@@@@@@@@')
-            return html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1), content_type
-            
+            return html_content, content_type
+        add_time_taken(start_time)
         return response.content, content_type
     except Exception as e:
         return str(e), 'text/plain'
@@ -83,6 +91,13 @@ def proxy(url):
 def site():
     modified_content, content_type = fetch_and_modify_content('')
     return Response(modified_content, content_type=content_type)
+
+def add_time_taken(start_time):
+    global overall_time
+    end_time = time.time()
+    time_taken = end_time - start_time
+    overall_time += time_taken
+
 
 if __name__ == '__main__':
     app.run(debug=True)
