@@ -66,7 +66,7 @@ def fetch_and_modify_content(url):
         content_type = response.headers['Content-Type']
         
         
-        if not content_type.startswith('image'):
+        if content_type:
             visited_urls.append(full_url)
             visited_urls.append(content_type)
             html_content = response.content.replace(user_site.encode('utf-8'), server_url.encode('utf-8'))
