@@ -57,8 +57,13 @@ def fetch_and_modify_content(url):
 
 @app.route('/<path:url>')
 def proxy(url):
-    modified_content, content_type = fetch_and_modify_content(url)
-    return Response(modified_content, content_type=content_type)
+    if 'http' not in url:
+        modified_content, content_type = fetch_and_modify_content(url)
+        return Response(modified_content, content_type=content_type)
+    else:
+        response = session.get(url)
+        content_type = response.headers['Content-Type']
+        return Response(response.content, content_type=content_type)
 
 @app.route('/')
 def site():
