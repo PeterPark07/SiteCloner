@@ -37,14 +37,18 @@ def clone_site():
             site = 'https://' + site
         user_site = site.rstrip('/')
         return f"User site set to: {user_site}<br><br><a href='/'>Return"
-    return """
-    <form method="post">
-        <label for="site">Enter Website URL:</label>
-        <input type="text" id="site" name="site">
-        <input type="submit" value="Clone">
-    </form>
-    """
 
+    
+    return f"""
+Currently cloning: {user_site}
+
+<form method='post'>
+    <label for='site'>Enter Website URL:</label>
+    <input type='text' id='site' name='site'>
+    <input type='submit' value='Clone'>
+</form>
+"""
+    
 def fetch_and_modify_content(url):
     global user_site
     full_url = user_site + '/' + url
