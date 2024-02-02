@@ -10,7 +10,6 @@ user_site = ""
 # Create a session and set headers
 session = requests.Session()
 session.headers.update(headers)
-session.allow_redirects = True
 
 # List to store visited URLs
 visited_urls = []
