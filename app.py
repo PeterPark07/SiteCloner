@@ -46,14 +46,14 @@ def clone_site():
     return f"""
 Currently cloning: {user_site}
 
-Visited URLs:
-{visited_urls_str}
-
 <form method='post'>
     <label for='site'>Enter Website URL:</label>
     <input type='text' id='site' name='site'>
     <input type='submit' value='Clone'>
 </form>
+<br><br>
+Visited URLs:
+{visited_urls_str}
 """
 
 def fetch_and_modify_content(url):
