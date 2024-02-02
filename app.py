@@ -48,7 +48,7 @@ Currently cloning: {user_site}
 
 <form method='post'>
     <label for='site'>Enter Website URL:</label>
-    <input type='text' id='site' name='site'>
+    <input type='text' id='site' name='site' value='https://'>
     <input type='submit' value='Clone'>
 </form>
 <br><br>
