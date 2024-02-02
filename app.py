@@ -1,7 +1,6 @@
 from flask import Flask, request, Response
 import requests
-from helper import headers, js_code, server_url
-from bs4 import BeautifulSoup
+from helper import headers, js_code, server_url, modify_links
 
 
 app = Flask(__name__)
@@ -56,17 +55,7 @@ def fetch_and_modify_content(url):
         return response.content, content_type
     except Exception as e:
         return str(e), 'text/plain'
-
-def modify_links(base_url, html_content):
-    soup = BeautifulSoup(html_content, 'html.parser')
-    for tag in soup.find_all(['a'], href=True):
-        old_url = tag['href']
-
-        if '//' not in old_url:
-            new_url = f'{base_url}/{old_url.lstrip("/")}'
-            tag['href'] = new_url
-
-    return str(soup)
+        
                                                     
 @app.route('/<path:url>')
 def proxy(url):
