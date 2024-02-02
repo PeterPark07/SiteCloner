@@ -63,6 +63,7 @@ def fetch_and_modify_content(url):
     try:
         response = session.get(full_url)
         content_type = response.headers['Content-Type']
+        visited_urls.append(content_type)
         html_content = response.content.replace(user_site.encode('utf-8'), server_url.encode('utf-8'))
         return html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1), content_type
     except Exception as e:
