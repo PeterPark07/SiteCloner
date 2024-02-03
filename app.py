@@ -1,6 +1,7 @@
 from flask import Flask, request, Response
 import requests
 from helper import headers, js_code, server_url, modify_links
+from database import log
 
 
 app = Flask(__name__)
