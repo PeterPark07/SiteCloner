@@ -3,6 +3,5 @@ import os
 
 # Connect to MongoDB
 mongo_client = MongoClient(os.getenv('mongodb'))
-db = mongo_client['Cloner']
-log = db['log']
-sites_log = db['cloned']
+db = mongo_client['Sites']
+log = db['cloner']
