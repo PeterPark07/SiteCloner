@@ -1,8 +1,7 @@
 from flask import Flask, request, Response
 import requests
 from helper import headers, js_code, server_url, modify_links
-from database import log
-
+from database import log  # Assuming 'log' is a MongoDB collection
 
 app = Flask(__name__)
 
@@ -12,20 +11,23 @@ user_site = ""
 session = requests.Session()
 session.headers.update(headers)
 
-# List to store visited URLs
-visited_urls = []
-
 @app.route('/clone', methods=['GET', 'POST'])
 def clone_site():
-    global user_site, visited_urls
+    global user_site
     if request.method == 'POST':
         site = request.form.get('site', '')
         if site.startswith('www'):
             site = 'https://' + site
         user_site = site.rstrip('/')
-        visited_urls.append(user_site)
+        
+        # Log the visited URL to MongoDB
+        log.insert_one({"url": user_site})
+        
         return f"User site set to: {user_site}<br><br><a href='/'>Return"
 
+    # Fetch visited URLs from MongoDB
+    visited_urls = [entry["url"] for entry in log.find()]
+    
     # Display visited URLs in the GET part
     visited_urls_str = '<br>'.join(visited_urls) if visited_urls else 'No visited URLs yet.'
     return f"""
@@ -56,8 +58,7 @@ def fetch_and_modify_content(url):
         return response.content, content_type
     except Exception as e:
         return str(e), 'text/plain'
-        
-                                                    
+
 @app.route('/<path:url>')
 def proxy(url):
     if 'http' not in url:
