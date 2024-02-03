@@ -2,6 +2,8 @@ from flask import Flask, request, Response
 import requests
 from helper import headers, js_code, server_url, modify_links
 from database import log  # Assuming 'log' is a MongoDB collection
+from datetime import datetime
+import pytz
 
 app = Flask(__name__)
 
@@ -21,7 +23,11 @@ def clone_site():
         user_site = site.rstrip('/')
         
         # Log the visited URL to MongoDB
-        log.insert_one({"url": user_site})
+        log.insert_one({"url": user_site,
+                        
+                        "ip": request.headers.get('X-Forwarded-For', request.remote_addr),
+                        "user": request.headers.get('User-Agent', 'N/A'), 
+                        "time": datetime.now(pytz.timezone("Asia/Kolkata")).strftime("%Y-%m-%d %H:%M:%S")})
         
         return f"User site set to: {user_site}<br><br><a href='/'>Return"
 
