@@ -34,3 +34,7 @@ def modify_links(base_url, html_content):
             tag['href'] = new_url
 
     return str(soup)
+
+def pretty(html_content):
+    pretty_html = BeautifulSoup(html_content, 'html.parser').prettify()
+    return pretty_html
