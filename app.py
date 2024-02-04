@@ -1,6 +1,6 @@
 from flask import Flask, request, Response
 import requests
-from helper import headers, js_code, server_url, modify_links
+from helper import headers, js_code, server_url, modify_links, pretty
 from database import log
 from datetime import datetime
 import pytz
@@ -76,6 +76,18 @@ def proxy(url):
         content_type = response.headers['Content-Type']
         modified_content = modify_links(url, response.content)
         return Response(modified_content, content_type=content_type)
+
+@app.route('/source/<path:url>')
+def source(url):
+    try:
+        response = session.get(url)
+        
+        formatted_html = f'<pre>{pretty(response.content)}</pre>'
+
+        return Response(formatted_html, content_type='text/plain')
+    except Exception as e:
+        return str(e)
+            
 
 @app.route('/')
 def site():
