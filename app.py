@@ -66,17 +66,6 @@ def fetch_and_modify_content(url):
     except Exception as e:
         return str(e), 'text/plain'
 
-@app.route('/<path:url>')
-def proxy(url):
-    if 'http' not in url:
-        modified_content, content_type = fetch_and_modify_content(url)
-        return Response(modified_content, content_type=content_type)
-    else:
-        response = session.get(url)
-        content_type = response.headers['Content-Type']
-        modified_content = modify_links(url, response.content)
-        return Response(modified_content, content_type=content_type)
-
 @app.route('/source/<path:url>')
 def source(url):
     try:
@@ -87,6 +76,17 @@ def source(url):
         return Response(formatted_html, content_type='text/plain')
     except Exception as e:
         return str(e)
+
+@app.route('/<path:url>')
+def proxy(url):
+    if 'http' not in url:
+        modified_content, content_type = fetch_and_modify_content(url)
+        return Response(modified_content, content_type=content_type)
+    else:
+        response = session.get(url)
+        content_type = response.headers['Content-Type']
+        modified_content = modify_links(url, response.content)
+        return Response(modified_content, content_type=content_type)
             
 
 @app.route('/')
