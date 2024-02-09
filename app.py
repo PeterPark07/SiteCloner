@@ -53,12 +53,13 @@ Visited URLs:
 
 def fetch_and_modify_content(url):
     full_url = user_site + '/' + url
+    user_sitename = user_site.replace('https://','')
     try:
         response = session.get(full_url)
         content_type = response.headers['Content-Type']
 
         if content_type.startswith(('text', 'application')):
-            html_content = response.content.replace(user_site.encode('utf-8'), server_url.encode('utf-8'))
+            html_content = response.content.replace(user_sitename.encode('utf-8'), server_url.encode('utf-8'))
             html_content = html_content.replace(b'</head>', js_code.encode('utf-8') + b'</head>', 1)
             return html_content, content_type
             
