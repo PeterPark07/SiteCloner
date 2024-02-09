@@ -37,7 +37,7 @@ def clone_site():
 
 
     log.insert_one({
-        "url": 'visiter /clone',
+        "url": 'visited /clone',
         "ip": request.headers.get('X-Forwarded-For', request.remote_addr),
         "user": request.headers.get('User-Agent', 'N/A'), 
         "time": datetime.now(pytz.timezone("Asia/Kolkata")).strftime("%Y-%m-%d %H:%M:%S")
@@ -100,6 +100,12 @@ def proxy(url):
 
 @app.route('/')
 def site():
+    log.insert_one({
+        "url": 'visited / of site',
+        "ip": request.headers.get('X-Forwarded-For', request.remote_addr),
+        "user": request.headers.get('User-Agent', 'N/A'), 
+        "time": datetime.now(pytz.timezone("Asia/Kolkata")).strftime("%Y-%m-%d %H:%M:%S")
+    })
     modified_content, content_type = fetch_and_modify_content('')
     return Response(modified_content, content_type=content_type)
 
