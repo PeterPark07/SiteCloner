@@ -7,8 +7,6 @@ import pytz
 
 app = Flask(__name__)
 
-visited_urls = [entry["url"] for entry in log.find()]
-
 user_site = [entry["url"] for entry in log.find()][-1]
 
 # Create a session and set headers
