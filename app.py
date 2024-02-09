@@ -33,7 +33,7 @@ def clone_site():
         return f"User site set to: {user_site}<br><br><a href='/'>Return"
 
     # Fetch visited URLs from MongoDB
-    visited_urls = [entry["url"] for entry in log.find()]
+    visited_urls = [entry["url"] for entry in log.find() if "url" in entry]
 
 
     log.insert_one({
