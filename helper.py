@@ -12,7 +12,7 @@ js_code = f"""
     document.addEventListener('DOMContentLoaded', () => {{
         document.body.addEventListener('click', e => {{
             const targetUrl = e.target.getAttribute('href');
-            const isExternalLink = targetUrl && targetUrl.startsWith('http') && !targetUrl.startsWith('{server_url}');
+            const isExternalLink = targetUrl && targetUrl.startsWith('http') && !targetUrl.startsWith('https://{server_url}');
             
             if (isExternalLink && !window.confirm('You are leaving the proxy site and going to ' + targetUrl + '. Continue?')) {{
                 e.preventDefault();
