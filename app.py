@@ -8,7 +8,6 @@ import pytz
 app = Flask(__name__)
 
 user_site = [entry["url"] for entry in log.find()][-1]
-print(user_site)
 
 # Create a session and set headers
 session = requests.Session()
